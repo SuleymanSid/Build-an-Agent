@@ -1,3 +1,97 @@
+/* ─── Setup step list (Prerequisites) ──────────────────────────── */
+.setup-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-left: 3px solid var(--border);
+  margin-left: 18px;
+  margin-bottom: 0;
+}
+.setup-item {
+  position: relative;
+  padding-left: 32px;
+  padding-bottom: 44px;
+}
+.setup-item:last-child { padding-bottom: 0; }
+
+.setup-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.setup-num {
+  position: absolute;
+  left: -21px;
+  top: 0;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 50%;
+  background: var(--accent2);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--bg);
+  z-index: 1;
+}
+.setup-header h3 {
+  font-size: 19px;
+  font-weight: 800;
+  margin-bottom: 4px;
+  padding-top: 8px;
+}
+.setup-body > p {
+  font-size: 14.5px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+/* Setup images */
+.setup-img {
+  margin: 16px 0;
+}
+.setup-img img {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 720px;
+}
+.setup-img figcaption {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 6px;
+  text-align: center;
+}
+
+/* Download button */
+.btn-download {
+  display: inline-flex;
+  align-items: center;
+  padding: 11px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none !important;
+  transition: opacity .15s;
+  margin-top: 4px;
+}
+.btn-download:hover { opacity: .88; }
+
+/* Warning callout */
+.callout-warn {
+  background: var(--warn-bg);
+  border-left: 4px solid #d4ab06;
+  color: #5a3e00;
+}
+
 /* ─── Reset & Base ─────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 

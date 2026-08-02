@@ -29,7 +29,7 @@
       <p class="hero-tagline">Go from idea to a production AI agent — with no manual work — using IBM Bob as your AI development partner inside your IDE.</p>
       <div class="hero-cta-row">
         <a href="#steps" class="btn btn-primary">Start the Tutorial →</a>
-        <a href="https://www.youtube.com/watch?v=5v8E-YbSPMo" target="_blank" rel="noopener noreferrer" class="btn btn-outline">▶ Watch Video</a>
+        <a href="#prerequisites" class="btn btn-outline">Setup Guide</a>
       </div>
       <p class="hero-quote">"Perfect demonstration of the Jevons paradox: increased efficiency boosts productivity and increases consumption."<br><strong>— Neel Sundaresan, General Manager, Automation &amp; AI</strong></p>
     </div>
@@ -73,23 +73,91 @@
   <!-- ─── PREREQUISITES ─────────────────────────────────────────── -->
   <section class="section" id="prerequisites">
     <div class="container">
-      <h2 class="section-title">Prerequisites</h2>
-      <div class="prereq-grid">
-        <div class="prereq-card">
-          <div class="prereq-num">1</div>
-          <div>
-            <h3>IBM Bob</h3>
-            <p>You need IBM Bob installed in your IDE. <a href="https://bob.ibm.com/trial/?utm_source=developer-content&amp;cm_sp=ibmdev-_-developer-_-trial" target="_blank" rel="noopener noreferrer">Sign up for the free trial →</a></p>
+      <h2 class="section-title">Prerequisites &amp; Setup</h2>
+      <p class="section-lead">Complete these steps before starting the tutorial. Follow them in order — each one unlocks the next.</p>
+
+      <ol class="setup-list">
+
+        <!-- SETUP STEP 1 -->
+        <li class="setup-item">
+          <div class="setup-header">
+            <div class="setup-num">1</div>
+            <div>
+              <h3>IBM ID</h3>
+              <p class="step-meta">You need an IBM ID to access IBM Bob.</p>
+            </div>
           </div>
-        </div>
-        <div class="prereq-card">
-          <div class="prereq-num">2</div>
-          <div>
-            <h3>watsonx Orchestrate ADK</h3>
-            <p>A running local environment of the watsonx Agent Development Kit. No active instance? Follow the <a href="https://developer.ibm.com/tutorials/getting-started-with-watsonx-orchestrate/" target="_blank" rel="noopener noreferrer">getting-started tutorial →</a></p>
+          <div class="setup-body">
+            <p>Check whether you already have an IBM ID (the same account used for IBM Cloud, IBM Developer, etc.).</p>
+            <div class="callout callout-tip">
+              <strong>Already have an IBM ID?</strong> You're all set — move on to Step 2.
+            </div>
+            <div class="callout callout-warn">
+              <strong>Don't have an IBM ID?</strong> Contact the event organizers to get one before proceeding.
+            </div>
           </div>
-        </div>
-      </div>
+        </li>
+
+        <!-- SETUP STEP 2 -->
+        <li class="setup-item">
+          <div class="setup-header">
+            <div class="setup-num">2</div>
+            <div>
+              <h3>Download &amp; install IBM Bob</h3>
+              <p class="step-meta">IBM Bob is a VS Code extension — install it from the marketplace.</p>
+            </div>
+          </div>
+          <div class="setup-body">
+            <p>IBM Bob runs inside Visual Studio Code. Download it using the button below and follow the installer instructions.</p>
+            <a href="https://marketplace.visualstudio.com/items?itemName=IBM.bob" target="_blank" rel="noopener noreferrer" class="btn btn-download">⬇ Download IBM Bob</a>
+          </div>
+        </li>
+
+        <!-- SETUP STEP 3 -->
+        <li class="setup-item">
+          <div class="setup-header">
+            <div class="setup-num">3</div>
+            <div>
+              <h3>Sign up for a free trial</h3>
+              <p class="step-meta">Activate your 30-day trial from inside Bob using your IBM ID.</p>
+            </div>
+          </div>
+          <div class="setup-body">
+            <p>Once Bob is installed and VS Code is open, look at the <strong>IBM BOB panel</strong> on the right side. Click <strong>"Sign up for a free trial"</strong> (shown by the red arrow below).</p>
+            <figure class="setup-img">
+              <img src="Images/Free_Trial.png" alt="IBM Bob panel showing the Sign up for a free trial button highlighted with a red arrow" loading="lazy" />
+              <figcaption>Click "Sign up for a free trial" in the Bob panel</figcaption>
+            </figure>
+            <p>This opens the Bob free trial page in your browser. The page will show <strong>"Logged in with IBMid"</strong> — confirming your IBM ID was detected. Optionally enter your company name, then click <strong>Submit</strong>.</p>
+            <figure class="setup-img">
+              <img src="Images/Free_Trial_Log_In.png" alt="Bob free trial page showing Logged in with IBMid and a Submit button" loading="lazy" />
+              <figcaption>The trial page — your IBM ID is pre-filled. Click Submit.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <!-- SETUP STEP 4 -->
+        <li class="setup-item">
+          <div class="setup-header">
+            <div class="setup-num">4</div>
+            <div>
+              <h3>Log in to Bob</h3>
+              <p class="step-meta">Complete the connection between VS Code and your new trial account.</p>
+            </div>
+          </div>
+          <div class="setup-body">
+            <p>Go back to VS Code. In the <strong>IBM BOB panel</strong>, click the <strong>"Log in to Bob"</strong> button (shown by the red arrow below). This finalises the authentication and activates your trial inside the IDE.</p>
+            <figure class="setup-img">
+              <img src="Images/Log_In.png" alt="IBM Bob panel showing the Log in to Bob button highlighted with a red arrow" loading="lazy" />
+              <figcaption>Click "Log in to Bob" to complete setup</figcaption>
+            </figure>
+            <div class="callout callout-tip">
+              <strong>You're ready!</strong> Once logged in, Bob is active and you can move on to the tutorial steps below.
+            </div>
+          </div>
+        </li>
+
+      </ol>
     </div>
   </section>
 
