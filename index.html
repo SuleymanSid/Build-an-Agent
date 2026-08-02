@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build AI Agents with IBM Bob &amp; watsonx Orchestrate</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+  <!-- ─── NAV ─────────────────────────────────────────────────── -->
+  <nav class="nav" id="top">
+    <div class="nav-inner">
+      <span class="nav-brand">IBM Bob · Tutorial</span>
+      <ul class="nav-links">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#steps">Steps</a></li>
+        <li><a href="#summary">Summary</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ──────────────────────────────────────────────────── -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">Tutorial · July 2026</div>
+      <h1>Build AI Agents with IBM Bob<br><span class="hero-sub">&amp; watsonx Orchestrate</span></h1>
+      <p class="hero-tagline">Go from idea to a production AI agent — with no manual work — using IBM Bob as your AI development partner inside your IDE.</p>
+      <div class="hero-cta-row">
+        <a href="#steps" class="btn btn-primary">Start the Tutorial →</a>
+        <a href="https://www.youtube.com/watch?v=5v8E-YbSPMo" target="_blank" rel="noopener noreferrer" class="btn btn-outline">▶ Watch Video</a>
+      </div>
+      <p class="hero-quote">"Perfect demonstration of the Jevons paradox: increased efficiency boosts productivity and increases consumption."<br><strong>— Neel Sundaresan, General Manager, Automation &amp; AI</strong></p>
+    </div>
+  </header>
+
+  <!-- ─── OVERVIEW ─────────────────────────────────────────────── -->
+  <section class="section bg-alt" id="overview">
+    <div class="container">
+      <h2 class="section-title">What you'll build</h2>
+      <p class="section-lead">By the end of this tutorial you will have a fully working AI agent running inside watsonx Orchestrate. The agent exposes two mathematical tools — <code>factorial_value</code> and <code>factorial_digits</code> — served over the Model Context Protocol (MCP). Every step is driven by IBM Bob; you only give approvals.</p>
+
+      <div class="card-grid three">
+        <div class="card card-icon">
+          <div class="icon icon-blue">🏗️</div>
+          <h3>MCP Server</h3>
+          <p>Bob scaffolds the Python project, installs FastMCP, writes the tools and shared helpers, and runs unit tests — fixing issues automatically.</p>
+        </div>
+        <div class="card card-icon">
+          <div class="icon icon-purple">🤖</div>
+          <h3>AI Agent</h3>
+          <p>Bob generates the agent YAML, reads the watsonx Orchestrate docs, and imports the agent configured with the Groq-hosted <strong>gpt-oss-120b</strong> model.</p>
+        </div>
+        <div class="card card-icon">
+          <div class="icon icon-teal">✅</div>
+          <h3>End-to-End Verified</h3>
+          <p>Bob creates an MCP client, runs live tests against both tools, verifies the import, and confirms the agent is ready to chat.</p>
+        </div>
+      </div>
+
+      <figure class="arch-figure">
+        <img
+          src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/architecture.png"
+          alt="Architecture diagram showing IBM Bob, watsonx Orchestrate, and Groq"
+          loading="lazy"
+        />
+        <figcaption>Architecture: IBM Bob automates the full pipeline from project setup to a deployed agent.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ─── PREREQUISITES ─────────────────────────────────────────── -->
+  <section class="section" id="prerequisites">
+    <div class="container">
+      <h2 class="section-title">Prerequisites</h2>
+      <div class="prereq-grid">
+        <div class="prereq-card">
+          <div class="prereq-num">1</div>
+          <div>
+            <h3>IBM Bob</h3>
+            <p>You need IBM Bob installed in your IDE. <a href="https://bob.ibm.com/trial/?utm_source=developer-content&amp;cm_sp=ibmdev-_-developer-_-trial" target="_blank" rel="noopener noreferrer">Sign up for the free trial →</a></p>
+          </div>
+        </div>
+        <div class="prereq-card">
+          <div class="prereq-num">2</div>
+          <div>
+            <h3>watsonx Orchestrate ADK</h3>
+            <p>A running local environment of the watsonx Agent Development Kit. No active instance? Follow the <a href="https://developer.ibm.com/tutorials/getting-started-with-watsonx-orchestrate/" target="_blank" rel="noopener noreferrer">getting-started tutorial →</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── STEPS ──────────────────────────────────────────────────── -->
+  <section class="section bg-alt" id="steps">
+    <div class="container">
+      <h2 class="section-title">Tutorial Steps</h2>
+      <p class="section-lead">Six main steps — plus an optional bonus — all driven by natural-language prompts to IBM Bob.</p>
+
+      <!-- Progress bar -->
+      <ol class="step-list">
+
+        <!-- STEP 1 -->
+        <li class="step-item" id="step-1">
+          <div class="step-header">
+            <div class="step-num">1</div>
+            <div>
+              <h3>Set up the Python project</h3>
+              <p class="step-meta">Bob creates the directory, virtual environment, and project structure.</p>
+            </div>
+          </div>
+          <div class="step-body">
+            <p>Open IBM Bob and ask it in natural language to create a project folder and set up your Python environment. If you don't have a virtual environment yet, Bob can create one for you.</p>
+
+            <div class="prompt-block">
+              <div class="prompt-label">💬 Prompt Bob</div>
+              <code>Hi Bob! For this project, create a directory ~/Documents/bob/mcp-wxo, and use my python virtual environment ~/.env/wxo-env.</code>
+            </div>
+
+            <div class="img-row">
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/bob-front.png" alt="IBM Bob IDE interface" loading="lazy" />
+                <figcaption>IBM Bob IDE</figcaption>
+              </figure>
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/python-venv.png" alt="Bob creating Python virtual environment" loading="lazy" />
+                <figcaption>Bob creates the virtual environment</figcaption>
+              </figure>
+            </div>
+
+            <div class="callout callout-tip">
+              <strong>Tip:</strong> Bob asks for approval at each step. You can enable <strong>Auto-approval</strong> if you prefer a hands-off flow. Click <kbd>Run</kbd> to proceed.
+            </div>
+
+            <div class="img-row">
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/create-dir-python.png" alt="Bob approval dialog" loading="lazy" />
+                <figcaption>Approval dialog — click Run</figcaption>
+              </figure>
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/project-structure.png" alt="Project structure created by Bob" loading="lazy" />
+                <figcaption>Project structure with README</figcaption>
+              </figure>
+            </div>
+
+            <p>Finally, ask Bob to activate the environment:</p>
+            <div class="prompt-block">
+              <div class="prompt-label">💬 Prompt Bob</div>
+              <code>Activate the python virtual environment</code>
+            </div>
+
+            <figure class="single-img">
+              <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/venv-activated.png" alt="Virtual environment activated" loading="lazy" />
+              <figcaption>Virtual environment activated successfully</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <!-- STEP 2 -->
+        <li class="step-item" id="step-2">
+          <div class="step-header">
+            <div class="step-num">2</div>
+            <div>
+              <h3>Build the MCP server, unit tests &amp; documentation</h3>
+              <p class="step-meta">Bob writes the server code, fixes issues automatically, and generates docs.</p>
+            </div>
+          </div>
+          <div class="step-body">
+            <p>Ask Bob to build an MCP server using FastMCP with two mathematical tools. Be specific about what each tool does.</p>
+
+            <div class="prompt-block">
+              <div class="prompt-label">💬 Prompt Bob</div>
+              <code>Create MCP Server using FastMCP with two mathematical tools. The first tool "factorial_value" calculates and returns the exact value of n!. The second tool "factorial_digits" returns only the number of decimal digits in n!, which is useful when the factorial is too large to display in full. You can have both tools share a common helper function to compute the factorial and avoid duplication of code.</code>
+            </div>
+
+            <div class="img-row">
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/create-mcp-2.png" alt="Bob receiving instructions" loading="lazy" />
+                <figcaption>Bob receives the instructions</figcaption>
+              </figure>
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/mcp-tasks-2.png" alt="Bob task plan" loading="lazy" />
+                <figcaption>Bob shows its task plan — click Approve</figcaption>
+              </figure>
+            </div>
+
+            <div class="flow-steps">
+              <div class="flow-step"><span class="flow-num">a</span> Bob installs FastMCP — click <kbd>Run</kbd> to authorise.</div>
+              <div class="flow-step"><span class="flow-num">b</span> Bob writes the server code and asks you to <kbd>Save</kbd>.</div>
+              <div class="flow-step"><span class="flow-num">c</span> Bob creates a test script, finds issues, and fixes them automatically.</div>
+              <div class="flow-step"><span class="flow-num">d</span> All tests pass — click <kbd>Approve</kbd>. Bob generates documentation.</div>
+            </div>
+
+            <div class="img-row">
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/fastmcp.png" alt="Bob installing FastMCP" loading="lazy" />
+                <figcaption>Bob installs FastMCP</figcaption>
+              </figure>
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/mcp-code2.png" alt="MCP server code" loading="lazy" />
+                <figcaption>MCP server code with two tools</figcaption>
+              </figure>
+            </div>
+
+            <div class="img-row">
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/bob-fixes.png" alt="Bob fixing issues automatically" loading="lazy" />
+                <figcaption>Bob auto-fixes code issues</figcaption>
+              </figure>
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/verification-script-completed.png" alt="Verification tests completed" loading="lazy" />
+                <figcaption>Verification tests completed</figcaption>
+              </figure>
+            </div>
+          </div>
+        </li>
+
+        <!-- STEP 3 -->
+        <li class="step-item" id="step-3">
+          <div class="step-header">
+            <div class="step-num">3</div>
+            <div>
+              <h3>Start the MCP server &amp; validate with a client</h3>
+              <p class="step-meta">Bob starts the server, builds a client, and runs end-to-end tests.</p>
+            </div>
+          </div>
+          <div class="step-body">
+            <p>Ask Bob to start the MCP server and connect to it using an MCP client with test cases for both tools.</p>
+
+            <div class="prompt-block">
+              <div class="prompt-label">💬 Prompt Bob</div>
+              <code>Please start the MCP Server, and test the 2 MCP tools with MCP client.</code>
+            </div>
+
+            <div class="img-row">
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/mcp-client-approve.png" alt="Bob MCP client task plan" loading="lazy" />
+                <figcaption>Bob's plan — click Approve</figcaption>
+              </figure>
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/mcp-client-code.png" alt="MCP client code" loading="lazy" />
+                <figcaption>MCP client with test cases</figcaption>
+              </figure>
+            </div>
+
+            <div class="img-row">
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/start-mcp-client.png" alt="Bob starting MCP client" loading="lazy" />
+                <figcaption>Bob starts the MCP client</figcaption>
+              </figure>
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/mcp-clients-tests.png" alt="MCP client test results" loading="lazy" />
+                <figcaption>Both tools pass end-to-end</figcaption>
+              </figure>
+            </div>
+          </div>
+        </li>
+
+        <!-- STEP 4 -->
+        <li class="step-item" id="step-4">
+          <div class="step-header">
+            <div class="step-num">4</div>
+            <div>
+              <h3>Add the MCP tools to watsonx Orchestrate</h3>
+              <p class="step-meta">Bob uses the Orchestrate CLI to import the tools and resolves errors automatically.</p>
+            </div>
+          </div>
+          <div class="step-body">
+            <p>Tell Bob to import the tools using the watsonx Orchestrate command-line interface. Bob reads the CLI help, identifies the correct command, and handles any errors it encounters.</p>
+
+            <div class="prompt-block">
+              <div class="prompt-label">💬 Prompt Bob</div>
+              <code>Need to add these MCP tools into watsonx Orchestrate, you can use the command line "orchestrate toolkits" to accomplish that.</code>
+            </div>
+
+            <div class="callout callout-info">
+              <strong>What Bob does automatically:</strong>
+              <ul>
+                <li>Reads the Orchestrate CLI <code>--help</code> to find the right command</li>
+                <li>Fixes a naming error (spaces are not allowed in tool names)</li>
+                <li>Adds a missing dependency discovered during the import</li>
+                <li>Verifies the tools are visible in watsonx Orchestrate</li>
+              </ul>
+            </div>
+
+            <div class="img-row">
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/mcp-tools-approve.png" alt="Bob task plan for MCP tools" loading="lazy" />
+                <figcaption>Bob's plan — click Approve</figcaption>
+              </figure>
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/mcp-name-error.png" alt="Bob fixing name error" loading="lazy" />
+                <figcaption>Bob fixes the naming error</figcaption>
+              </figure>
+            </div>
+
+            <div class="img-row">
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/mcp-requirements.png" alt="Bob adding missing dependency" loading="lazy" />
+                <figcaption>Bob adds missing dependency</figcaption>
+              </figure>
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/mcp-list.png" alt="MCP tools in watsonx Orchestrate" loading="lazy" />
+                <figcaption>Tools successfully imported</figcaption>
+              </figure>
+            </div>
+          </div>
+        </li>
+
+        <!-- STEP 5 -->
+        <li class="step-item" id="step-5">
+          <div class="step-header">
+            <div class="step-num">5</div>
+            <div>
+              <h3>Create the watsonx Orchestrate agent</h3>
+              <p class="step-meta">Bob reads the IBM docs, writes the YAML, and imports the agent.</p>
+            </div>
+          </div>
+          <div class="step-body">
+            <p>Ask Bob to create an agent YAML file from the IBM documentation spec and import it. The agent uses the <strong>gpt-oss-120b</strong> model hosted on Groq infrastructure.</p>
+
+            <div class="prompt-block">
+              <div class="prompt-label">💬 Prompt Bob</div>
+              <code>Create Agent YAML file, you can find the yaml specification at https://developer.watson-orchestrate.ibm.com/agents/build_agent, use the following llm for the agent "groq/openai/gpt-oss-120b". Then import the agent on watsonx Orchestrate using orchestrate command line.</code>
+            </div>
+
+            <div class="img-row">
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/create-agent-approve-plan.png" alt="Bob agent plan" loading="lazy" />
+                <figcaption>Bob's plan — click Approve</figcaption>
+              </figure>
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/agent-yaml.png" alt="Agent YAML file" loading="lazy" />
+                <figcaption>Bob generates the agent YAML</figcaption>
+              </figure>
+            </div>
+
+            <div class="img-row">
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/agent-update.png" alt="Bob fixing YAML error" loading="lazy" />
+                <figcaption>Bob fixes an import error</figcaption>
+              </figure>
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/bob-success.png" alt="All tasks completed" loading="lazy" />
+                <figcaption>All tasks completed ✓</figcaption>
+              </figure>
+            </div>
+          </div>
+        </li>
+
+        <!-- STEP 6 -->
+        <li class="step-item" id="step-6">
+          <div class="step-header">
+            <div class="step-num">6</div>
+            <div>
+              <h3>Verify the agent in watsonx Orchestrate</h3>
+              <p class="step-meta">Log in, confirm the setup, and test the agent with real queries.</p>
+            </div>
+          </div>
+          <div class="step-body">
+            <p>Log in to your watsonx Orchestrate instance and verify that the agent and its tools are configured correctly. Then chat with the agent to confirm it calls the right MCP tools.</p>
+
+            <div class="img-row">
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/agent-list.png" alt="Factorial agent in agent list" loading="lazy" />
+                <figcaption>Find "factorial_agent" in Manage Agents</figcaption>
+              </figure>
+              <figure>
+                <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/agent-mcp.png" alt="Agent with MCP tools and Groq model" loading="lazy" />
+                <figcaption>MCP tools + Groq model confirmed</figcaption>
+              </figure>
+            </div>
+
+            <div class="test-queries">
+              <div class="test-query">
+                <div class="test-query-label">Test query 1</div>
+                <code>"What is the factorial value of 5?"</code>
+                <p>The agent calls <strong>factorial_value</strong> and returns 120.</p>
+                <figure>
+                  <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/test-factorial-value.png" alt="Agent test factorial value" loading="lazy" />
+                </figure>
+              </div>
+              <div class="test-query">
+                <div class="test-query-label">Test query 2</div>
+                <code>"How many factorial digits are there on factorial 120?"</code>
+                <p>The agent calls <strong>factorial_digits</strong> and returns the digit count.</p>
+                <figure>
+                  <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/test-factorial-digits.png" alt="Agent test factorial digits" loading="lazy" />
+                </figure>
+              </div>
+            </div>
+          </div>
+        </li>
+
+      </ol><!-- end step-list -->
+
+      <!-- ── OPTIONAL STEP 7 ──────────────────────────────────── -->
+      <div class="optional-section" id="step-7">
+        <div class="optional-badge">Optional</div>
+        <h3>Step 7 · Connect Bob to watsonx Orchestrate MCP servers</h3>
+        <p>After completing the workflow, you can wire Bob directly to two watsonx Orchestrate MCP servers. This unlocks a smarter "Agent Architect" mode where Bob reads live documentation and manages agents without leaving the IDE.</p>
+
+        <div class="card-grid two">
+          <div class="card">
+            <h4>wxo-docs</h4>
+            <p>Gives Bob read access to the public watsonx Orchestrate ADK documentation so it can look up correct YAML specs, model names, and API options in real time.</p>
+          </div>
+          <div class="card">
+            <h4>orchestrate-adk</h4>
+            <p>Gives Bob access to the Orchestrate SDK so it can list, create, and manage agents and tools directly from the IDE without running separate CLI commands.</p>
+          </div>
+        </div>
+
+        <h4 class="sub-heading">1 · Open Global MCP Settings</h4>
+        <p>In Bob, navigate to <strong>… › MCP Servers › Edit Global MCP</strong> and add:</p>
+
+        <div class="img-row">
+          <figure>
+            <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/edit-mcp.png" alt="Bob MCP server menu" loading="lazy" />
+            <figcaption>MCP Servers menu in Bob</figcaption>
+          </figure>
+          <figure>
+            <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/bob-mcp.png" alt="Bob global MCP config" loading="lazy" />
+            <figcaption>Global MCP configuration editor</figcaption>
+          </figure>
+        </div>
+
+        <pre class="code-block"><code>{
+  "mcpServers": {
+    "wxo-docs": {
+      "command": "uvx",
+      "args": [
+        "mcp-proxy",
+        "--transport",
+        "streamablehttp",
+        "https://developer.watson-orchestrate.ibm.com/mcp"
+      ],
+      "alwaysAllow": ["SearchIbmWatsonxOrchestrateAdk"],
+      "disabled": false
+    }
+  }
+}</code></pre>
+
+        <h4 class="sub-heading">2 · Open Project MCP Settings</h4>
+        <p>Navigate to <strong>… › MCP Servers › Edit Project MCP</strong>. Replace <code>WXO_MCP_WORKING_DIRECTORY</code> with your project path (e.g. <code>~/Documents/bob/mcp-wxo</code>):</p>
+
+        <pre class="code-block"><code>{
+  "mcpServers": {
+    "orchestrate-adk": {
+      "command": "uvx",
+      "args": [
+        "--with", "ibm-watsonx-orchestrate==2.1.0",
+        "ibm-watsonx-orchestrate-mcp-server==2.1.0"
+      ],
+      "env": {
+        "WXO_MCP_WORKING_DIRECTORY": "/path/to/root/of/project"
+      },
+      "alwaysAllow": [
+        "list_agents", "export_agent", "get_tool_template",
+        "list_tools", "list_toolkits", "list_knowledge_bases",
+        "check_knowledge_base_status", "list_connections",
+        "list_voice_configs", "list_models", "check_version"
+      ],
+      "disabled": false
+    }
+  }
+}</code></pre>
+
+        <h4 class="sub-heading">3 · Add the Agent Architect mode</h4>
+        <p>Go to <strong>… › Modes › { } › Edit Global Modes</strong> and add:</p>
+
+        <div class="img-row">
+          <figure>
+            <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/edit-modes.png" alt="Bob modes menu" loading="lazy" />
+            <figcaption>Modes menu in Bob</figcaption>
+          </figure>
+          <figure>
+            <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/bob-modes-v2.png" alt="Bob global modes editor" loading="lazy" />
+            <figcaption>Global modes editor</figcaption>
+          </figure>
+        </div>
+
+        <pre class="code-block"><code>customModes:
+  - slug: agent-architect
+    name: Agent Architect
+    roleDefinition: >
+      You are Bob, a highly skilled software engineer with extensive knowledge
+      in many programming languages, frameworks, design patterns, and best
+      practices. You are especially skilled at building new agents for watsonx Orchestrate.
+    customInstructions: |-
+      Before solving any tasks related to watsonx Orchestrate use the
+      wxo-docs MCP server's SearchIbmWatsonxOrchestrateAdk tool to
+      understand how to author agents, tools, toolkits, models,
+      knowledge_bases and connections.
+
+      When authoring an agent, use the orchestrate-adk mcp server
+      list_tools command to find relevant tools and list_agents to
+      find relevant collaborator agents.
+
+      Never include ibm-watsonx-orchestrate in your requirements.txt
+    groups:
+      - read
+      - edit
+      - browser
+      - command
+      - mcp
+    source: global</code></pre>
+
+        <p>Save, then scroll to the bottom of the right pane, click <strong>Code</strong> and select <strong>Agent Architect</strong> mode. You can now repeat Steps 4 and 5 with full MCP intelligence.</p>
+
+        <div class="img-row">
+          <figure>
+            <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/agent-architect-mode-v2.png" alt="Agent Architect mode selected" loading="lazy" />
+            <figcaption>Agent Architect mode active</figcaption>
+          </figure>
+          <figure>
+            <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/completion-using-mcp.png" alt="MCP optimised completion" loading="lazy" />
+            <figcaption>Completed via MCP-optimised approach</figcaption>
+          </figure>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── SUMMARY ────────────────────────────────────────────────── -->
+  <section class="section" id="summary">
+    <div class="container">
+      <h2 class="section-title">Summary &amp; next steps</h2>
+      <p class="section-lead">You used IBM Bob to automate the full lifecycle of an agentic workflow — from a blank directory to a verified AI agent in watsonx Orchestrate — without manual debugging or context-switching.</p>
+
+      <figure class="single-img">
+        <img src="https://developer.ibm.com/developer/default/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/images/bob-tasks-completed.png" alt="Summary of all tasks completed by Bob" loading="lazy" />
+        <figcaption>All tasks completed by Bob — no manual work required</figcaption>
+      </figure>
+
+      <div class="card-grid three">
+        <div class="card">
+          <h4>🔒 Security checks</h4>
+          <p>Explore Bob's AI-powered security analysis to audit your code before shipping.</p>
+        </div>
+        <div class="card">
+          <h4>⚡ Performance tests</h4>
+          <p>Ask Bob to add load and performance tests to your MCP server tools.</p>
+        </div>
+        <div class="card">
+          <h4>🔧 More tools &amp; agents</h4>
+          <p>Extend the workflow by adding new MCP tools and collaborator agents inside watsonx Orchestrate.</p>
+        </div>
+      </div>
+
+      <div class="acknowledgments">
+        <h3>Acknowledgements</h3>
+        <p>The author deeply appreciates the support of <a href="https://www.linkedin.com/in/neel-sundaresan-a964a2/" target="_blank" rel="noopener noreferrer"><strong>Neel Sundaresan</strong></a> (General Manager, Automation &amp; AI – IBM) and <a href="https://www.linkedin.com/in/emarcoux2/" target="_blank" rel="noopener noreferrer"><strong>Eric Marcoux</strong></a> (Software Engineer, watsonx Orchestrate) for their guidance, review, and contributions to this tutorial.</p>
+        <p>This tutorial was produced as part of the IBM Open Innovation Community initiative: Agentic AI (AI for Developers and Ecosystem).</p>
+        <p>
+          <a href="https://developer.ibm.com/tutorials/build-agents-mcp-tools-watsonx-orchestrate-using-bob/" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Original article on IBM Developer →</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>Made with <a href="https://bob.ibm.com" target="_blank" rel="noopener noreferrer">IBM Bob</a> &nbsp;·&nbsp; IBM Open Innovation Community &nbsp;·&nbsp; Agentic AI</p>
+    </div>
+  </footer>
+
+</body>
+</html>
